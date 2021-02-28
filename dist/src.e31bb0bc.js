@@ -117,49 +117,50 @@ parcelRequire = (function (modules, cache, entry, globalName) {
   }
 
   return newRequire;
-})({"img/image2.png":[function(require,module,exports) {
-module.exports = "/image2.d85111cb.png";
-},{}],"model.js":[function(require,module,exports) {
+})({"classes/site.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.model = void 0;
+exports.Site = void 0;
 
-var _image = _interopRequireDefault(require("./img/image2.png"));
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
 
-var model = [{
-  type: 'title',
-  value: 'Конструктор сайтов',
-  options: {
-    tag: 'h2',
-    styles: {
-      background: 'linear-gradient(to right, #ff0099, #493240)',
-      color: '#fff',
-      'text-aligain': 'center',
-      padding: '10px'
-    }
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+var Site = /*#__PURE__*/function () {
+  function Site(selector) {
+    _classCallCheck(this, Site);
+
+    this.elem = document.querySelector(selector);
   }
-}, {
-  type: 'text',
-  value: 'here we go for text'
-}, {
-  type: 'columns',
-  value: ['111', '222', '333', '444']
-}, {
-  type: 'images',
-  value: _image.default
-}];
-exports.model = model;
-},{"./img/image2.png":"img/image2.png"}],"utils/utils.js":[function(require,module,exports) {
+
+  _createClass(Site, [{
+    key: "render",
+    value: function render(model) {
+      var _this = this;
+
+      this.elem.innerHTML = '';
+      model.forEach(function (item) {
+        _this.elem.insertAdjacentHTML('beforeend', item.toHTML());
+      });
+    }
+  }]);
+
+  return Site;
+}();
+
+exports.Site = Site;
+},{}],"utils/utils.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
+exports.block = block;
 exports.css = exports.col = exports.row = void 0;
 
 var row = function row(content) {
@@ -177,55 +178,321 @@ exports.col = col;
 
 var css = function css() {
   var styles = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-  var keys = Object.keys(styles);
-  var array = keys.map(function (key) {
-    return "".concat(key, ": ").concat(styles[key]);
-  });
-  return array.join(';');
+
+  if (typeof styles == 'string') {
+    return styles;
+  } else {
+    var keys = Object.keys(styles);
+    var array = keys.map(function (key) {
+      return "".concat(key, ": ").concat(styles[key]);
+    });
+    return array.join(';');
+  }
 };
 
 exports.css = css;
-},{}],"templates.js":[function(require,module,exports) {
+
+function block(type) {
+  return " \n  <form name=".concat(type, ">\n    <h5>").concat(type, "</h5>\n    <div class=\"form-group mb-2\">\n      <input class=\"form-control form-control-sm\" name=\"value\" placeholder=\"value\">\n    </div>\n    <div class=\"form-group  mb-2\">\n      <input class=\"form-control form-control-sm\" name=\"styles\" placeholder=\"styles\">\n    </div>\n    <button type=\"submit\" class=\"btn btn-primary btn-sm\">\u0414\u043E\u0431\u0430\u0432\u0438\u0442\u044C</button>\n  </form>  \n  <hr/>\n  ");
+}
+},{}],"classes/blocks.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.templates = void 0;
+exports.ColumnsBlock = exports.TextBlock = exports.ImagesBlock = exports.TitleBlock = void 0;
 
-var _utils = require("./utils/utils");
+var _utils = require("../utils/utils");
 
-var title = function title(item) {
-  var _item$options = item.options,
-      _item$options$tag = _item$options.tag,
-      tag = _item$options$tag === void 0 ? 'h1' : _item$options$tag,
-      styles = _item$options.styles;
-  return (0, _utils.row)((0, _utils.col)("<".concat(tag, ">").concat(item.value, "</").concat(tag, ">")), (0, _utils.css)(styles));
-};
+function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
-var text = function text(item) {
-  return (0, _utils.row)((0, _utils.col)("<p>".concat(item.value, "</p>")));
-};
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
 
-var images = function images(item) {
-  return (0, _utils.row)((0, _utils.col)("<img src=\"".concat(item.value, "\"/>")));
-};
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
 
-var columns = function columns(item) {
-  var html = item.value.map(function (items) {
-    return (0, _utils.col)(items);
-  });
-  return (0, _utils.row)(html.join(''));
-};
+function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function _createSuperInternal() { var Super = _getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
 
-var templates = {
-  title: title,
-  text: text,
-  images: images,
-  columns: columns
-};
-exports.templates = templates;
-},{"./utils/utils":"utils/utils.js"}],"../node_modules/parcel-bundler/src/builtins/bundle-url.js":[function(require,module,exports) {
+function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
+
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
+
+function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+var Blocks = /*#__PURE__*/function () {
+  function Blocks(value, options) {
+    _classCallCheck(this, Blocks);
+
+    this.value = value;
+    this.options = options;
+  }
+
+  _createClass(Blocks, [{
+    key: "toHTML",
+    value: function toHTML() {
+      throw new Error('Медот toHTML должен быть реализован');
+    }
+  }]);
+
+  return Blocks;
+}();
+
+var TitleBlock = /*#__PURE__*/function (_Blocks) {
+  _inherits(TitleBlock, _Blocks);
+
+  var _super = _createSuper(TitleBlock);
+
+  function TitleBlock(value, options) {
+    _classCallCheck(this, TitleBlock);
+
+    return _super.call(this, value, options);
+  }
+
+  _createClass(TitleBlock, [{
+    key: "toHTML",
+    value: function toHTML() {
+      var _this$options = this.options,
+          _this$options$tag = _this$options.tag,
+          tag = _this$options$tag === void 0 ? 'h1' : _this$options$tag,
+          styles = _this$options.styles;
+      return (0, _utils.row)((0, _utils.col)("<".concat(tag, ">").concat(this.value, "</").concat(tag, ">")), (0, _utils.css)(styles));
+    }
+  }]);
+
+  return TitleBlock;
+}(Blocks);
+
+exports.TitleBlock = TitleBlock;
+
+var ImagesBlock = /*#__PURE__*/function (_Blocks2) {
+  _inherits(ImagesBlock, _Blocks2);
+
+  var _super2 = _createSuper(ImagesBlock);
+
+  function ImagesBlock(value, options) {
+    _classCallCheck(this, ImagesBlock);
+
+    return _super2.call(this, value, options);
+  }
+
+  _createClass(ImagesBlock, [{
+    key: "toHTML",
+    value: function toHTML() {
+      var styles = this.options.styles;
+      return (0, _utils.row)((0, _utils.col)("<img src=\"".concat(this.value, "\"/>")), (0, _utils.css)(styles));
+    }
+  }]);
+
+  return ImagesBlock;
+}(Blocks);
+
+exports.ImagesBlock = ImagesBlock;
+
+var TextBlock = /*#__PURE__*/function (_Blocks3) {
+  _inherits(TextBlock, _Blocks3);
+
+  var _super3 = _createSuper(TextBlock);
+
+  function TextBlock(value, options) {
+    _classCallCheck(this, TextBlock);
+
+    return _super3.call(this, value, options);
+  }
+
+  _createClass(TextBlock, [{
+    key: "toHTML",
+    value: function toHTML() {
+      var styles = this.options.styles;
+      return (0, _utils.row)((0, _utils.col)("<p>".concat(this.value, "</p>")), (0, _utils.css)(styles));
+    }
+  }]);
+
+  return TextBlock;
+}(Blocks);
+
+exports.TextBlock = TextBlock;
+
+var ColumnsBlock = /*#__PURE__*/function (_Blocks4) {
+  _inherits(ColumnsBlock, _Blocks4);
+
+  var _super4 = _createSuper(ColumnsBlock);
+
+  function ColumnsBlock(value, options) {
+    _classCallCheck(this, ColumnsBlock);
+
+    return _super4.call(this, value, options);
+  }
+
+  _createClass(ColumnsBlock, [{
+    key: "toHTML",
+    value: function toHTML() {
+      var styles = this.options.styles;
+      var html = this.value.map(function (items) {
+        return (0, _utils.col)(items);
+      });
+      return (0, _utils.row)(html.join(''), (0, _utils.css)(styles));
+    }
+  }]);
+
+  return ColumnsBlock;
+}(Blocks);
+
+exports.ColumnsBlock = ColumnsBlock;
+},{"../utils/utils":"utils/utils.js"}],"classes/sidebar.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.Sidebar = void 0;
+
+var _utils = require("../utils/utils");
+
+var _blocks = require("./blocks");
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+var Sidebar = /*#__PURE__*/function () {
+  function Sidebar(selector, updateCallback) {
+    _classCallCheck(this, Sidebar);
+
+    this.elem = document.querySelector(selector);
+    this.update = updateCallback;
+    this.init();
+  }
+
+  _createClass(Sidebar, [{
+    key: "init",
+    value: function init() {
+      this.elem.insertAdjacentHTML('afterbegin', this.template);
+      this.elem.addEventListener('submit', this.add.bind(this));
+    }
+  }, {
+    key: "template",
+    get: function get() {
+      return [(0, _utils.block)('text'), (0, _utils.block)('title')].join('');
+    }
+  }, {
+    key: "add",
+    value: function add(e) {
+      e.preventDefault();
+      var type = e.target.name;
+      var value = e.target.value.value;
+      var styles = e.target.styles.value;
+      var newBlock = type === 'text' ? newBlock = new _blocks.TextBlock(value, {
+        styles: styles
+      }) : newBlock = new _blocks.TitleBlock(value, {
+        styles: styles
+      });
+      this.update(newBlock);
+      e.target.value.value = '';
+      e.target.styles.value = '';
+    }
+  }]);
+
+  return Sidebar;
+}();
+
+exports.Sidebar = Sidebar;
+},{"../utils/utils":"utils/utils.js","./blocks":"classes/blocks.js"}],"classes/app.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.App = void 0;
+
+var _site = require("./site");
+
+var _sidebar = require("./sidebar");
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+var App = /*#__PURE__*/function () {
+  function App(model) {
+    _classCallCheck(this, App);
+
+    this.model = model;
+    this.init();
+  }
+
+  _createClass(App, [{
+    key: "init",
+    value: function init() {
+      var _this = this;
+
+      var site = new _site.Site('#site');
+      site.render(this.model);
+
+      var updateCallback = function updateCallback(newBlock) {
+        _this.model.push(newBlock);
+
+        site.render(_this.model);
+      };
+
+      new _sidebar.Sidebar('#panel', updateCallback);
+    }
+  }]);
+
+  return App;
+}();
+
+exports.App = App;
+},{"./site":"classes/site.js","./sidebar":"classes/sidebar.js"}],"img/image2.png":[function(require,module,exports) {
+module.exports = "/image2.d85111cb.png";
+},{}],"model.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.model = void 0;
+
+var _blocks = require("./classes/blocks");
+
+var _image = _interopRequireDefault(require("./img/image2.png"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var model = [new _blocks.TitleBlock('Lion express', {
+  tag: 'h2',
+  styles: {
+    background: 'linear-gradient(to right, #ff0099, #493240)',
+    color: '#fff',
+    'text-aligain': 'center',
+    padding: '10px'
+  }
+}), new _blocks.TextBlock('Быстро передать документы, отправить ключи или букет любимой — найдем решение.', {
+  styles: {
+    padding: '10px'
+  }
+}), new _blocks.ColumnsBlock(['Курьер или машина будут у вас очень быстро', 'Минимальная цена доставки в Москве. Отличается в других регионах', 'Вы видите, где сейчас курьер с вашей посылкой', 'Крупнейший в СНГ международный логи-стический и 3PL-оператор.'], {
+  styles: {
+    color: '16px'
+  }
+}), new _blocks.ImagesBlock(_image.default, {
+  styles: {
+    padding: '10px'
+  }
+})];
+exports.model = model;
+},{"./classes/blocks":"classes/blocks.js","./img/image2.png":"img/image2.png"}],"../node_modules/parcel-bundler/src/builtins/bundle-url.js":[function(require,module,exports) {
 var bundleURL = null;
 
 function getBundleURLCached() {
@@ -300,22 +567,14 @@ module.hot.accept(reloadCSS);
 },{"_css_loader":"../node_modules/parcel-bundler/src/builtins/css-loader.js"}],"index.js":[function(require,module,exports) {
 "use strict";
 
-var _model = require("./model");
+var _app = require("./classes/app");
 
-var _templates = require("./templates");
+var _model = require("./model");
 
 require("./styles/main.css");
 
-var site = document.querySelector('#site');
-
-_model.model.forEach(function (item) {
-  var toHTML = _templates.templates[item.type];
-
-  if (toHTML) {
-    site.insertAdjacentHTML('beforeend', toHTML(item));
-  }
-});
-},{"./model":"model.js","./templates":"templates.js","./styles/main.css":"styles/main.css"}],"../node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
+new _app.App(_model.model);
+},{"./classes/app":"classes/app.js","./model":"model.js","./styles/main.css":"styles/main.css"}],"../node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 var OldModule = module.bundle.Module;
@@ -343,7 +602,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "51153" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "54191" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
